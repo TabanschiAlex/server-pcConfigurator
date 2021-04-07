@@ -2,6 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 const server = express();
+const auth = require('./routes/AuthRoute');
 
 const caseRoute = require('./routes/CaseRoute');
 const cpuRoute = require('./routes/CpuRoute');
@@ -19,6 +20,7 @@ server.use(express.static('public'));
 server.use(logger('dev'));
 server.use(cors());
 
+server.use(auth);
 server.use(
     caseRoute,
     cpuRoute,

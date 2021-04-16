@@ -5,6 +5,7 @@ const AuthController = require('../controllers/AuthController');
 const urlencodedParser = bodyParser.urlencoded({extended: false});
 
 router.post('/register', urlencodedParser, AuthController.register);
-router.post('/login', urlencodedParser, AuthController.login)
+router.post('/login', urlencodedParser, AuthController.login);
+router.post('/logout', urlencodedParser, AuthController.logout);
 
 module.exports = router;

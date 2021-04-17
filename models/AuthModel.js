@@ -63,7 +63,7 @@ class AuthModel extends MainModel {
         }
     }
 
-    async isLogIn(login, token) {
+    async validateToken(token) {
         try {
             this.user = await this.db.query(
                 `SELECT
@@ -71,13 +71,13 @@ class AuthModel extends MainModel {
                  FROM
                     ${this.table}
                  WHERE
-                    username = ?`,
-                [login]
+                    token = ?`,
+                [token]
             );
 
             return token === this.user[0].token && moment(this.user[0]['token_expires']) >= moment();
         } catch {
-            return false;
+            return 'error';
         }
     }
 
@@ -97,7 +97,6 @@ class AuthModel extends MainModel {
                         this.user[0].id
                     ]
                 );
-
                 return true;
             }
 

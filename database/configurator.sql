@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 05 2021 г., 19:34
+-- Время создания: Апр 17 2021 г., 22:30
 -- Версия сервера: 10.3.22-MariaDB
 -- Версия PHP: 7.4.5
 
@@ -36,12 +36,25 @@ CREATE TABLE `casse` (
   `photo` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT 'noPhoto'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Дамп данных таблицы `casse`
+-- Структура таблицы `config`
 --
 
-INSERT INTO `casse` (`id`, `manufacturer`, `model`, `format_id`, `price`, `photo`) VALUES
-(1, 'test', 'test', 1, '50.00', 'noPhoto');
+CREATE TABLE `config` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `case_id` int(10) UNSIGNED DEFAULT NULL,
+  `keyboard_id` int(10) UNSIGNED DEFAULT NULL,
+  `monitor_id` int(10) UNSIGNED DEFAULT NULL,
+  `motherboard_id` int(10) UNSIGNED DEFAULT NULL,
+  `mouse_id` int(10) UNSIGNED DEFAULT NULL,
+  `psu_id` int(10) UNSIGNED DEFAULT NULL,
+  `total_price` int(10) UNSIGNED,
+  `discount_price` int(10) UNSIGNED DEFAULT NULL,
+  `discount_id` int(10) UNSIGNED DEFAULT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -61,13 +74,30 @@ CREATE TABLE `cpu` (
   `photo` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT '/noPhoto'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Дамп данных таблицы `cpu`
+-- Структура таблицы `cpu_config`
 --
 
-INSERT INTO `cpu` (`id`, `manufacturer`, `model`, `frequency`, `socket_id`, `cores`, `threads`, `price`, `photo`) VALUES
-(1, 'AMD', 'Ryzen 3 3300x', 4000, 1, 4, 8, '120.00', '/noPhoto'),
-(2, 'Intel', 'Core i3 10100', 4200, 2, 4, 8, '130.00', '/noPhoto');
+CREATE TABLE `cpu_config` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `cpu_id` int(10) UNSIGNED DEFAULT NULL,
+  `config_id` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `discount`
+--
+
+CREATE TABLE `discount` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `type` enum('percent','units') COLLATE utf8mb4_unicode_ci DEFAULT 'percent',
+  `value` decimal(10,2) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -79,13 +109,6 @@ CREATE TABLE `format` (
   `id` tinyint(3) UNSIGNED NOT NULL,
   `name` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Дамп данных таблицы `format`
---
-
-INSERT INTO `format` (`id`, `name`) VALUES
-(1, 'atx');
 
 -- --------------------------------------------------------
 
@@ -103,6 +126,18 @@ CREATE TABLE `gpu` (
   `memory_capacity` tinyint(3) UNSIGNED NOT NULL,
   `price` decimal(5,2) NOT NULL,
   `photo` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT 'noPhoto'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `gpu_config`
+--
+
+CREATE TABLE `gpu_config` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `gpu_id` int(10) UNSIGNED DEFAULT NULL,
+  `config_id` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -161,13 +196,6 @@ CREATE TABLE `motherboard` (
   `price` decimal(5,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Дамп данных таблицы `motherboard`
---
-
-INSERT INTO `motherboard` (`id`, `manufacturer`, `model`, `chipset`, `ram_slots`, `max_frequency`, `ram_type`, `socket_id`, `number_of_cpu`, `number_of_gpu`, `format_id`, `number_of_rom`, `photo`, `price`) VALUES
-(5, 'test', 'test', 'test', 4, 4000, 'ddr4', 2, 2, 3, 1, 2, 'test', '100.00');
-
 -- --------------------------------------------------------
 
 --
@@ -219,6 +247,38 @@ CREATE TABLE `ram` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `ram_config`
+--
+
+CREATE TABLE `ram_config` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `ram_id` int(10) UNSIGNED DEFAULT NULL,
+  `config_id` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `rules` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`, `rules`) VALUES
+(1, 'admin', '{}'),
+(2, 'user', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `rom`
 --
 
@@ -236,6 +296,18 @@ CREATE TABLE `rom` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `rom_config`
+--
+
+CREATE TABLE `rom_config` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `rom_id` int(10) UNSIGNED DEFAULT NULL,
+  `config_id` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `socket`
 --
 
@@ -244,13 +316,28 @@ CREATE TABLE `socket` (
   `name` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Дамп данных таблицы `socket`
+-- Структура таблицы `users`
 --
 
-INSERT INTO `socket` (`id`, `name`) VALUES
-(1, 'AM4'),
-(2, '1151');
+CREATE TABLE `users` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role_id` int(10) UNSIGNED DEFAULT NULL,
+  `token_expires` datetime DEFAULT NULL,
+  `token` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `role_id`, `token_expires`, `token`) VALUES
+(7, 'Alex', '$2b$10$uG3nVZOUkmZ9S40O/BnmfuO/90XEMTLRKjkgxvX6bRxSKc2BKVzyy', 2, '2021-04-17 03:54:59', '$2b$04$K2vgmUlf.jLkwErVgE0j1O'),
+(10, 'test', '$2b$10$1J.LtEPqAc8386/3kvvoEOu7KMpgNMvAH7FW0ZozSVDfYBMc14L66', 2, '2021-04-17 21:00:30', '$2b$04$9h.zQ1H5slygTvIAYAxjYu');
 
 --
 -- Индексы сохранённых таблиц
@@ -264,11 +351,32 @@ ALTER TABLE `casse`
   ADD KEY `case___format` (`format_id`);
 
 --
+-- Индексы таблицы `config`
+--
+ALTER TABLE `config`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `config_discount_id_fk` (`discount_id`),
+  ADD KEY `config_user_id_fk` (`user_id`);
+
+--
 -- Индексы таблицы `cpu`
 --
 ALTER TABLE `cpu`
   ADD PRIMARY KEY (`id`),
   ADD KEY `cpu___socket` (`socket_id`);
+
+--
+-- Индексы таблицы `cpu_config`
+--
+ALTER TABLE `cpu_config`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cpu_config_config_id_fk` (`config_id`);
+
+--
+-- Индексы таблицы `discount`
+--
+ALTER TABLE `discount`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `format`
@@ -280,6 +388,12 @@ ALTER TABLE `format`
 -- Индексы таблицы `gpu`
 --
 ALTER TABLE `gpu`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `gpu_config`
+--
+ALTER TABLE `gpu_config`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -321,9 +435,27 @@ ALTER TABLE `ram`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `ram_config`
+--
+ALTER TABLE `ram_config`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `rom`
 --
 ALTER TABLE `rom`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `rom_config`
+--
+ALTER TABLE `rom_config`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -331,6 +463,14 @@ ALTER TABLE `rom`
 --
 ALTER TABLE `socket`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `user_username_uindex` (`username`),
+  ADD KEY `user_roles_id_fk` (`role_id`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -343,10 +483,28 @@ ALTER TABLE `casse`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT для таблицы `config`
+--
+ALTER TABLE `config`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT для таблицы `cpu`
 --
 ALTER TABLE `cpu`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT для таблицы `cpu_config`
+--
+ALTER TABLE `cpu_config`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `discount`
+--
+ALTER TABLE `discount`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `format`
@@ -358,6 +516,12 @@ ALTER TABLE `format`
 -- AUTO_INCREMENT для таблицы `gpu`
 --
 ALTER TABLE `gpu`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `gpu_config`
+--
+ALTER TABLE `gpu_config`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -397,9 +561,27 @@ ALTER TABLE `ram`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT для таблицы `ram_config`
+--
+ALTER TABLE `ram_config`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT для таблицы `rom`
 --
 ALTER TABLE `rom`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `rom_config`
+--
+ALTER TABLE `rom_config`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -407,6 +589,12 @@ ALTER TABLE `rom`
 --
 ALTER TABLE `socket`
   MODIFY `id` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT для таблицы `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -419,10 +607,23 @@ ALTER TABLE `casse`
   ADD CONSTRAINT `case___format` FOREIGN KEY (`format_id`) REFERENCES `format` (`id`);
 
 --
+-- Ограничения внешнего ключа таблицы `config`
+--
+ALTER TABLE `config`
+  ADD CONSTRAINT `config_discount_id_fk` FOREIGN KEY (`discount_id`) REFERENCES `discount` (`id`),
+  ADD CONSTRAINT `config_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
 -- Ограничения внешнего ключа таблицы `cpu`
 --
 ALTER TABLE `cpu`
   ADD CONSTRAINT `cpu___socket` FOREIGN KEY (`socket_id`) REFERENCES `socket` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `cpu_config`
+--
+ALTER TABLE `cpu_config`
+  ADD CONSTRAINT `cpu_config_config_id_fk` FOREIGN KEY (`config_id`) REFERENCES `config` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `motherboard`
@@ -430,6 +631,12 @@ ALTER TABLE `cpu`
 ALTER TABLE `motherboard`
   ADD CONSTRAINT `motherboard___format` FOREIGN KEY (`format_id`) REFERENCES `format` (`id`),
   ADD CONSTRAINT `motherboard___socket` FOREIGN KEY (`socket_id`) REFERENCES `socket` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `user_roles_id_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

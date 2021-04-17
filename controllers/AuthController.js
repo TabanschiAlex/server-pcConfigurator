@@ -10,7 +10,7 @@ class AuthController {
     }
 
     static async logout(req, res) {
-        res.json(await Auth.logout(req.body.name, req.body.token));
+        res.json(await Auth.logout(req.body.token));
     }
 
     static async validateToken(req, res) {

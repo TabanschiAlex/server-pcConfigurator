@@ -83,7 +83,7 @@ class AuthModel extends MainModel {
 
     async logout(login, token) {
         try {
-            const isLogIn = this.isLogIn(login, token);
+            const isLogIn = this.validateToken(token);
 
             if (isLogIn) {
                 await this.db.query(

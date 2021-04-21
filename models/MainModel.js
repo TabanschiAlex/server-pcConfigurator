@@ -22,28 +22,32 @@ class MainModel {
         }
     }
 
-    update(id) {
-
-    }
-
-    filter() {
-
-    }
-
-    removePhoto(id) {
-
-    }
-
-    delete(id) {
+    async delete(id) {
         this.db.query(
             `DELETE FROM ${this.table} 
                 WHERE id = ${id}`,
             (error, results, fields) => {
-            if (error) {
-                console.log(error.sqlMessage)
-            }
-        });
+                if (error) {
+                    console.log(error.sqlMessage)
+                }
+            });
     }
+
+    /*async update(id, ...args) {
+
+    }
+
+    async filter(...args) {
+
+    }
+
+    async addPhoto(id, link) {
+
+    }
+
+    async removePhoto(id, link) {
+
+    }*/
 }
 
 module.exports = MainModel;

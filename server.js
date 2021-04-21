@@ -33,11 +33,3 @@ server.use(
     mouseRoute,
     monitorRoute
 );
-
-/*server.use((req, res, next) => {
-    if (req.body.token) {
-        console.log('a')
-    }
-
-    next();
-})*/

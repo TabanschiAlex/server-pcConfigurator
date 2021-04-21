@@ -14,7 +14,7 @@ class AuthController {
     }
 
     static async validateToken(req, res) {
-        res.json(await  Auth.validateToken(req.body.token));
+        res.json(await Auth.validateToken(req.body.token));
     }
 }
 

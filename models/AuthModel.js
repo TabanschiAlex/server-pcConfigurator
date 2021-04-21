@@ -20,8 +20,8 @@ class AuthModel extends MainModel {
             );
 
             return true;
-        } catch {
-            return false;
+        } catch (e) {
+            console.log(e.message);
         }
     }
 
@@ -54,12 +54,14 @@ class AuthModel extends MainModel {
                     ]
                 );
 
+                console.log(generatedToken)
+
                 return generatedToken;
             }
 
             return 'Username or password is incorrect!';
-        } catch {
-            return 'error';
+        } catch (e) {
+            console.log(e.message);
         }
     }
 
@@ -76,8 +78,8 @@ class AuthModel extends MainModel {
             );
 
             return token === this.user[0].token && moment(this.user[0]['token_expires']) >= moment();
-        } catch {
-            return 'error';
+        } catch (e) {
+            console.log(e.message);
         }
     }
 
@@ -101,8 +103,8 @@ class AuthModel extends MainModel {
             }
 
             return false;
-        } catch {
-            return 'error';
+        } catch (e) {
+            console.log(e.message);
         }
     }
 }

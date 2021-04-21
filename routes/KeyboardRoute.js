@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const KeyboardController = require('../controllers/KeyboardController');
 
-router.get('/api/keyboard', KeyboardController.index);
+router.get('/keyboard', KeyboardController.index);
 
 module.exports = router;

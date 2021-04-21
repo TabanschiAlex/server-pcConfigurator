@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const RomController = require('../controllers/RomController');
 
-router.get('/api/rom', RomController.index);
+router.get('/rom', RomController.index);
 
 module.exports = router;

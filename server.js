@@ -14,6 +14,7 @@ const ramRoute = require('./routes/RamRoute');
 const romRoute = require('./routes/RomRoute');
 const mouseRoute = require('./routes/MouseRoute');
 const monitorRoute = require('./routes/MonitorRoute');
+const configuratorRoute = require('./routes/ConfiguratorRoute');
 
 server.listen(3000, 'localhost');
 server.use(express.static('public'));
@@ -31,5 +32,6 @@ server.use(
     ramRoute,
     romRoute,
     mouseRoute,
-    monitorRoute
+    monitorRoute,
+    configuratorRoute
 );

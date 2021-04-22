@@ -16,7 +16,7 @@ const mouseRoute = require('./routes/MouseRoute');
 const monitorRoute = require('./routes/MonitorRoute');
 const configuratorRoute = require('./routes/ConfiguratorRoute');
 
-server.listen(3000, 'localhost');
+server.listen(process.env.PORT || 80);
 server.use(express.static('public'));
 server.use(logger('dev'));
 server.use(cors());
